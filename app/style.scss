@@ -1,0 +1,15 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+a {
+  &:hover, &:active {
+    outline-width: 0;
+  }
+}
+input {
+  &:focus {
+    outline-width: 0;
+  }
+}
