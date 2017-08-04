@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
 
-import { Tab } from './Tab'
+import { Tab } from './DraggableTab'
+import { CustomDragLayer } from './CustomDragLayer'
 import { randomKey } from './utils'
 
 import styles from './tabbar.scss'
@@ -62,8 +63,11 @@ class TabBarComponent extends Component {
   render() {
     const { tabs, activeTab } = this.state
     return (
-      <div className={styles.tabbar}>
-        {tabs.map(tab => <Tab key={`${tab.id}`} title={tab.title} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
+      <div>
+        <div className={styles.tabbar}>
+          {tabs.map(tab => <Tab key={`${tab.id}`} title={tab.title} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
+        </div>
+        <CustomDragLayer />
       </div>
     )
   }
