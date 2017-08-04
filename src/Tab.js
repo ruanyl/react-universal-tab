@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classNames from 'classnames'
 
 import styles from './tab.scss'
 
@@ -9,6 +10,8 @@ export class TabComponent extends Component {
     onClose: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     style: React.PropTypes.object,
+    className: React.PropTypes.string,
+    active: React.PropTypes.bool,
   }
 
   static defaultProps = {
@@ -20,10 +23,11 @@ export class TabComponent extends Component {
   }
 
   render() {
-    const { style } = this.props
+    const { style, className, active } = this.props
+    const tabClassNames = classNames(className, styles.tab, { [styles.active]: active })
 
     return (
-      <div onClick={this.onSelect} className={styles.tab} style={style}>
+      <div onClick={this.onSelect} className={tabClassNames} style={style}>
         <span className={styles.title}>{this.props.title}</span>
         <span className={styles.left} />
         <span className={styles.right} />

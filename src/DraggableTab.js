@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { findDOMNode } from 'react-dom'
 import classNames from 'classnames'
 import { DragSource } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend'
@@ -65,16 +66,19 @@ export class DraggableTabComponent extends Component {
 
     return connectDragSource(
       <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={tabClassNames} style={{ ...getStyles(this.props), maxWidth, zIndex }}>
-        <TabComponent {...props} onClose={this.onClose} />
+        <TabComponent {...props} active={active} onClose={this.onClose} />
       </div>
     )
   }
 }
 
 const tabSource = {
-  beginDrag(props) {
+  beginDrag(props, monitor, component) {
     return {
       ...props.tab,
+      maxWidth: props.maxWidth || 150,
+      active: props.active,
+      width: findDOMNode(component).offsetWidth,
     }
   },
 }

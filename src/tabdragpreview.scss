@@ -1,0 +1,9 @@
+.preview {
+  background-color: #d0d0d0;
+  &.active {
+    background-color: #f6f6f6;
+    .left, .right {
+      background-color: #f6f6f6;
+    }
+  }
+}
