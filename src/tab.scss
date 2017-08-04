@@ -7,7 +7,6 @@
 .tab {
   display: flex;
   position: relative;
-  background-color: #d0d0d0;
   box-shadow: 0px -0.5px 0px #9c9c9c;
   flex: 1;
   .title {
@@ -69,16 +68,53 @@
   min-width: 0;
   width: 150px;
   margin-left: 32px;
+  background-color: #d0d0d0;
+
+  &.hover {
+    animation: onHover 200ms ease-in forwards;
+    .left, .right {
+      animation: onHover 200ms ease-in forwards;
+    }
+  }
+
+  &.out {
+    background-color: #ececec;
+    animation: onOut 200ms ease-in forwards;
+    .left, .right {
+      background-color: #ececec;
+      animation: onOut 200ms ease-in forwards;
+    }
+  }
+
+  &.removing {
+    flex: 1;
+    opacity: 0 !important;
+    animation: flexShrink 100ms ease-in forwards;
+  }
+
+  &.active {
+    background-color: #f6f6f6;
+    .left, .right {
+      background-color: #f6f6f6;
+    }
+  }
 }
-.removing {
-  flex: 1;
-  opacity: 0 !important;
-  animation: flexShrink 100ms ease-in forwards;
-}
+
 @keyframes flexShrink {
   to {
     flex: .01;
     flex: .00001;
     margin-left: 0;
+  }
+}
+@keyframes onHover {
+  to {
+    background-color: #ececec;
+  }
+}
+
+@keyframes onOut {
+  to {
+    background-color: #d0d0d0;
   }
 }

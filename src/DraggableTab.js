@@ -9,16 +9,16 @@ import { TabComponent } from './Tab'
 import styles from './tab.scss'
 
 const getStyles = props => {
-  const { isDragging, maxWidth } = props
+  const { isDragging } = props
 
   return {
     opacity: isDragging ? 0 : 1,
-    maxWidth,
   }
 }
 
 export class DraggableTabComponent extends Component {
   static propTypes = {
+    active: React.PropTypes.bool,
     connectDragSource: React.PropTypes.func,
     connectDragPreview: React.PropTypes.func,
     isDragging: React.PropTypes.bool,
@@ -29,6 +29,7 @@ export class DraggableTabComponent extends Component {
   }
 
   static defaultProps = {
+    active: false,
     maxWidth: 150,
   }
 
@@ -36,27 +37,34 @@ export class DraggableTabComponent extends Component {
     super(props)
     this.state = {
       removing: false,
+      hover: false,
+      out: false,
     }
   }
 
   onClose = e => {
     e.stopPropagation()
     this.setState({ removing: true })
-    this.props.updateActiveTabOnClose(this.props.tab)
+    this.props.onClose(this.props.tab)
+  }
 
-    setTimeout(() => {
-      this.setState({ removing: false })
-      this.props.onClose(this.props.tab)
-    }, 120)
+  onMouseLeave = () => {
+    this.setState({ hover: false, out: true })
+    setTimeout(() => this.setState({ out: false }), 400)
+  }
+
+  onMouseEnter = () => {
+    this.setState({ hover: true })
   }
 
   render() {
-    const { connectDragSource, connectDragPreview, isDragging, ...props } = this.props
-    const tabClassNames = classNames(styles.draggableTab, { [styles.removing]: this.state.removing })
+    const { connectDragSource, connectDragPreview, isDragging, active, maxWidth, ...props } = this.props
+    const tabClassNames = classNames(styles.draggableTab, { [styles.removing]: this.state.removing, [styles.active]: active, [styles.hover]: this.state.hover && !active, [styles.out]: this.state.out && !active })
+    const zIndex = active ? 2 : 1
     connectDragPreview(getEmptyImage())
 
     return connectDragSource(
-      <div className={tabClassNames} style={getStyles(this.props)}>
+      <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={tabClassNames} style={{ ...getStyles(this.props), maxWidth, zIndex }}>
         <TabComponent {...props} onClose={this.onClose} />
       </div>
     )

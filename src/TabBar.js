@@ -45,11 +45,6 @@ class TabBarComponent extends Component {
 
   onClose = closedTab => {
     const tabs = tabsAfterClose(this.state.tabs, closedTab)
-    this.setState({ tabs })
-  }
-
-  updateActiveTabOnClose = closedTab => {
-    const tabs = tabsAfterClose(this.state.tabs, closedTab)
     let activeTab = this.state.activeTab
 
     if (activeTab.id === closedTab.id) {
@@ -58,6 +53,8 @@ class TabBarComponent extends Component {
       activeTab = activeTab || tabs[tabs.length - 1]
       this.onSelect(activeTab)
     }
+
+    setTimeout(() => this.setState({ tabs }), 120)
   }
 
   render() {
