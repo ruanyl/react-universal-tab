@@ -5,17 +5,12 @@ import styles from './tab.scss'
 
 export class TabComponent extends Component {
   static propTypes = {
-    title: React.PropTypes.string,
     tab: React.PropTypes.object,
     onClose: React.PropTypes.func,
     onSelect: React.PropTypes.func,
     style: React.PropTypes.object,
     className: React.PropTypes.string,
     active: React.PropTypes.bool,
-  }
-
-  static defaultProps = {
-    title: 'New Tab',
   }
 
   onSelect = () => {
@@ -28,7 +23,7 @@ export class TabComponent extends Component {
 
     return (
       <div onClick={this.onSelect} className={tabClassNames} style={style}>
-        <span className={styles.title}>{this.props.title}</span>
+        <span className={styles.title}>{this.props.tab.title}</span>
         <span className={styles.left} />
         <span className={styles.right} />
         <span onClick={this.props.onClose} className={styles.close} />

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import update from 'react/lib/update'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
 
@@ -57,12 +58,26 @@ class TabBarComponent extends Component {
     setTimeout(() => this.setState({ tabs }), 120)
   }
 
+  moveTab = (dragIndex, hoverIndex) => {
+    const { tabs } = this.state
+    const dragTab = tabs[dragIndex]
+
+    this.setState(update(this.state, {
+      tabs: {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragTab],
+        ],
+      },
+    }))
+  }
+
   render() {
     const { tabs, activeTab } = this.state
     return (
       <div>
         <div className={styles.tabbar}>
-          {tabs.map(tab => <Tab key={`${tab.id}`} title={tab.title} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
+          {tabs.map((tab, i) => <Tab moveTab={this.moveTab} index={i} key={`${tab.id}`} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
         </div>
         <CustomDragLayer />
       </div>
