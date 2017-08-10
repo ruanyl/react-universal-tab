@@ -3,6 +3,7 @@ import update from 'react/lib/update'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { DragDropContext } from 'react-dnd'
 
+import shouldPureComponentUpdate from './shouldPureComponentUpdate'
 import { Tab } from './DraggableTab'
 import { CustomDragLayer } from './CustomDragLayer'
 import { randomKey } from './utils'
@@ -38,6 +39,8 @@ class TabBarComponent extends Component {
       activeTab,
     }
   }
+
+  shouldComponentUpdate = shouldPureComponentUpdate
 
   onSelect = tab => {
     this.setState({ activeTab: tab })

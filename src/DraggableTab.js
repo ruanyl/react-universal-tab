@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { DragSource, DropTarget } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 
+import shouldPureComponentUpdate from './shouldPureComponentUpdate'
 import ItemTypes from './ItemTypes'
 import { TabComponent } from './Tab'
 
@@ -43,6 +44,8 @@ export class _Tab extends Component {
       out: false,
     }
   }
+
+  shouldComponentUpdate = shouldPureComponentUpdate
 
   onClose = e => {
     e.stopPropagation()
