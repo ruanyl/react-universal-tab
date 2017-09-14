@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { TabBar } from '../src/TabBar'
+import { AutoSizerTabBar } from '../src/TabBar'
 
 export class App extends Component {
   constructor(props) {
@@ -22,8 +22,8 @@ export class App extends Component {
   }
   render() {
     return (
-      <div style={{ width: 1000, marginTop: 10 }}>
-        <TabBar initialTabs={this.state.initialTabs} />
+      <div style={{ width: 1000, height: 30, marginTop: 10 }}>
+        <AutoSizerTabBar initialTabs={this.state.initialTabs} />
       </div>
     )
   }

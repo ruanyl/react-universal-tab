@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import update from 'react/lib/update'
-import HTML5Backend from 'react-dnd-html5-backend'
-import { DragDropContext } from 'react-dnd'
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 
 import shouldPureComponentUpdate from './shouldPureComponentUpdate'
 import { Tab } from './DraggableTab'
-import { CustomDragLayer } from './CustomDragLayer'
+// import { TabComponent } from './Tab'
+// import { CustomDragLayer } from './CustomDragLayer'
 import { randomKey } from './utils'
 
 import styles from './tabbar.scss'
@@ -16,10 +15,11 @@ const tabsAfterClose = (tabs, closedTab) => {
   return remainingTabs
 }
 
-class TabBarComponent extends Component {
+export class TabBar extends Component {
   static propTypes = {
     initialTabs: React.PropTypes.array,
     onTabChange: React.PropTypes.func,
+    width: React.PropTypes.number,
   }
 
   static defaultProps = {
@@ -38,6 +38,10 @@ class TabBarComponent extends Component {
       tabs,
       activeTab,
     }
+
+    this.marginLeft = 32
+    this.maxTabWidth = 150
+    this.minTabWidth = 40
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate
@@ -61,31 +65,32 @@ class TabBarComponent extends Component {
     setTimeout(() => this.setState({ tabs }), 120)
   }
 
-  moveTab = (dragIndex, hoverIndex) => {
+  calTabContentWidth() {
+    const { width } = this.props
     const { tabs } = this.state
-    const dragTab = tabs[dragIndex]
-
-    this.setState(update(this.state, {
-      tabs: {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragTab],
-        ],
-      },
-    }))
+    let tabWidth = (width / tabs.length) - this.marginLeft
+    if (tabWidth > this.maxTabWidth) {
+      tabWidth = this.maxTabWidth
+    } else if (tabWidth < this.minTabWidth) {
+      tabWidth = this.minTabWidth
+    }
+    return tabWidth
   }
 
   render() {
     const { tabs, activeTab } = this.state
+    const tabContentWidth = this.calTabContentWidth()
+    const tabWidth = tabContentWidth + this.marginLeft
     return (
-      <div>
-        <div className={styles.tabbar}>
-          {tabs.map((tab, i) => <Tab moveTab={this.moveTab} index={i} key={`${tab.id}`} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
-        </div>
-        <CustomDragLayer />
+      <div className={styles.tabbar} style={{ width: this.props.width }} ref={node => { this.tabBar = node }}>
+        {tabs.map((tab, i) => <Tab key={`${tab.id}`} tabContentWidth={tabContentWidth} style={{ transform: `translateX(${tabWidth * i}px)` }} active={tab.id === activeTab.id} tab={tab} onSelect={this.onSelect} onClose={this.onClose} updateActiveTabOnClose={this.updateActiveTabOnClose} />)}
       </div>
     )
   }
 }
 
-export const TabBar = DragDropContext(HTML5Backend)(TabBarComponent)
+export const AutoSizerTabBar = props => (
+  <AutoSizer disableHeight>
+    {({ width }) => <TabBar width={width} {...props} /> }
+  </AutoSizer>
+)

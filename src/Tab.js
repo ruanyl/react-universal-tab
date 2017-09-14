@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames'
 
-import shallowEqual from './shallowEqual'
-
 import styles from './tab.scss'
 
 export class TabComponent extends Component {
@@ -13,10 +11,6 @@ export class TabComponent extends Component {
     style: React.PropTypes.object,
     className: React.PropTypes.string,
     active: React.PropTypes.bool,
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.active !== nextProps.active || !shallowEqual(this.props.tab, nextProps.tab)
   }
 
   onSelect = () => {
